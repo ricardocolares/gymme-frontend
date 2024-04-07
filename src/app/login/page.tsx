@@ -1,18 +1,41 @@
-import React from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
+"use client"
 
-import Logo120 from '../../../public/assets/Logo120x120.png'
+import React from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import {z} from 'zod';
 
-type FormFields = {
-    email: string;
-    password: string;
-};
+import Logo120 from '../../../public/assets/Logo120x120.png';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const schema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8),
+});
+
+type FormFields = z.infer<typeof schema>
 
 const login = () => {
-  const { register, handleSubmit } = useForm<FormFields>();
+  const { 
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    } = useForm<FormFields>({
+        resolver: zodResolver(schema)
+    });
 
-  const onSubmit: SubmitHandler<FormFields> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    // try {
+    //   await new Promise((resolve) => setTimeout(resolve, 1000));
+    //   throw new Error();
+    //   console.log(data)
+    // } catch (error) {
+    //   setError("root", {
+    //     message: "O email não existe"
+    //   })
+    // }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log(data)
+
   }
 
     return (
@@ -24,27 +47,29 @@ const login = () => {
           onSubmit={handleSubmit(onSubmit)}
           >
             <input 
-            {...register("email", {
-                required: true,
-                pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-
-            })}
+            {...register("email")}
             type="email"
             className="h-12 w-96 px-4  mt-6  rounded-lg text-lg" 
             placeholder="123@gymme.com.br" 
             />
+            {errors.email && 
+              (<div className='text-red-500'>{errors.email.message}</div>
+            )}
             <input 
             type="password" 
-            {...register("password",{
-                required: true,
-                minLength: 8,
-            })}
+            {...register("password")}
             className="h-12 w-96 px-4  mt-6  rounded-lg text-lg" 
             placeholder="Digite sua senha" 
             />
+            {errors.password && 
+              (<div className='text-red-500'>{errors.password.message}</div>
+            )}
             <button 
             className="bg-blue-500 text-white h-12 w-96 rounded-lg text-lg mt-12"
-            type="submit">Confirmar</button>
+            type="submit"
+            disabled={isSubmitting}>
+                {isSubmitting ? "Carregando..." : "Confirmar" }
+            </button>
           </form>
         </div>
     );
