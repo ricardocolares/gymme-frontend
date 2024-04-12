@@ -24,18 +24,9 @@ const login = () => {
     });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    // try {
-    //   await new Promise((resolve) => setTimeout(resolve, 1000));
-    //   throw new Error();
-    //   console.log(data)
-    // } catch (error) {
-    //   setError("root", {
-    //     message: "O email não existe"
-    //   })
-    // }
     await new Promise((resolve) => setTimeout(resolve, 1000));
     console.log(data)
-
+    window.location.href = '/athlete';
   }
 
     return (

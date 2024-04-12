@@ -9,15 +9,26 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Logo120 from '../../../public/assets/Logo120x120.png'
 
 const schema = z.object({
-    email: z.string().email(),
-    password: z.string().min(8),
-});
+  email: z.string().email(),
+  name: z.string().min(1).max(50),
+  password: z.string().min(8),
+  passwordValidation: z.string().min(8),
+}).refine(
+(values) => {
+  return values.password === values.passwordValidation;
+},
+{
+  message: "As senhas devem coincidir!",
+  path: ["passwordValidation"],
+}
+);
 
 type FormFields = z.infer<typeof schema>
 
 
 
 const signup = () => {
+
     const {
         register,
         handleSubmit,
@@ -29,6 +40,7 @@ const signup = () => {
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
         console.log(data)
+        window.location.href = '/athlete';
     }
     return (
       <div className="flex flex-col items-center justify-center bg-backgroundPurple min-h-screen">
@@ -45,6 +57,14 @@ const signup = () => {
             {errors.email && 
               (<div className='text-red-500'>{errors.email.message}</div>
             )}
+                      <input 
+          {...register("name")}
+          type="name"
+          className="h-12 w-96 px-4  mt-6  rounded-lg text-lg" 
+          placeholder="Digite seu nome" />
+            {errors.name && 
+              (<div className='text-red-500'>{errors.name.message}</div>
+            )}
           <input 
           {...register("password")}
           type="password" 
@@ -54,19 +74,21 @@ const signup = () => {
               (<div className='text-red-500'>{errors.password.message}</div>
             )}
           <input 
-           {...register("password")}
+           {...register("passwordValidation")}
            type="password"
            className="h-12 w-96 px-4 mt-6 rounded-lg text-lg" 
            placeholder="Confirme sua senha" />
-            {errors.password && 
-              (<div className='text-red-500'>{errors.password.message}</div>
+            {errors.passwordValidation && 
+              (<div className='text-red-500'>{errors.passwordValidation.message}</div>
             )}
+          {/* <Link href='/athlete'> */}
           <button 
           className="bg-blue-500 text-white h-12 w-96 rounded-lg text-lg mt-12"
           type="submit"
           disabled={isSubmitting}>
             {isSubmitting ? "Carregando..." : "Confirmar" }
           </button>
+          {/* </Link> */}
         </form>
       </div>
     );
