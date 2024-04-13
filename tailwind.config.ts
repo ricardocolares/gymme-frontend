@@ -9,7 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        backgroundPurple: '#483D8B'
+        backgroundPurple: '#483D8B',
+        buttonBackground: '#D9D9D9'
       },
     },
   },
