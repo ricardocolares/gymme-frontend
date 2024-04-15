@@ -1,7 +1,7 @@
 import React from 'react'
 import LoggedHeader from '../components/loggedHeader'
 
-import exerciseRecord from '../../../public/assets/exerciseRecord.svg'
+import exerciseRecord from '../../../public/asses/exerctiseRecord.svg'
 import frequencyRecord from '../../../public/assets/frequencyRecord.svg'
 import performanceRecord from '../../../public/assets/performanceRecord.svg'
 import LpImg1 from '../../../public/assets/LpImg1.svg'
